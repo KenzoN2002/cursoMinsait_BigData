@@ -2,7 +2,7 @@
 
 DATE="$(date --date="-0 day" "+%Y%m%d")"
 
-TABLES=("cidade" "estado" "parceiro" "cliente" "subcategoria" "categoria" "item_pedido" "produto")
+TABLES=("cidade" "estado" "filiar" "parceiro" "cliente" "subcategoria" "categoria" "item_pedido" "produto")
 TABELA_CLIENTE="TBL_CLIENTE"
 
 TARGET_DATABASE="aula_hive"
