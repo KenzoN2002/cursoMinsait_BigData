@@ -1,20 +1,21 @@
-CREATE EXTERNAL TABLE IF NOT EXISTS ${TARGET_DATABASE}.${TARGET_TABLE_EXTERNAL} (
-        id_pedido string,
-        dt_pedido string,
-        id_parceiro string,
-        id_cliente string,
-        id_filial string,
-        vr_total_pago string
+CREATE EXTERNAL TABLE IF NOT  EXISTS ${TARGET_DATABASE}.${TARGET_TABLE_EXTERNAL} ( 
+    id_pedido string,
+    dt_pedido string,
+    id_parceiro string,
+    id_cliente string,
+    id_filial string,
+    vr_total_pago string
     )
-COMMENT 'Tabela de Pedido'
+COMMENT 'Tabela de Categoria'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 STORED AS TEXTFILE
 location '${HDFS_DIR}'
-TBLPROPERTIES ("skip.headers.line.count"="1");
+TBLPROPERTIES ("skip.header.line.count"="1");
+
 
 CREATE TABLE IF NOT EXISTS ${TARGET_DATABASE}.${TARGET_TABLE_GERENCIADA} (
-    id_pedido string,
+    id_pedido string, 
     dt_pedido string,
     id_parceiro string,
     id_cliente string,
@@ -22,25 +23,25 @@ CREATE TABLE IF NOT EXISTS ${TARGET_DATABASE}.${TARGET_TABLE_GERENCIADA} (
     vr_total_pago string
 )
 PARTITIONED BY (DT_FOTO STRING)
-ROW FORMAT SERDE 'org.apache.hadoop.hive.ql.io.orc.OrcSerde'
-STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.orc.OrcInputFormat'
-OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat'
-TBLPROPERTIES ('orc.compress'='SNAPPY');
+ROW FORMAT SERDE 'org.apache.hadoop.hive.ql.io.orc.OrcSerde' 
+STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.orc.OrcInputFormat' 
+OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat' 
+TBLPROPERTIES ( 'orc.compress'='SNAPPY');
+
 
 SET hive.exec.dynamic.partition=true;
 SET hive.exec.dynamic.partition.mode=nonstrict;
 
 INSERT OVERWRITE TABLE
     ${TARGET_DATABASE}.${TARGET_TABLE_GERENCIADA}
-PARTITION(DT_FOTO)
+PARTITION(DT_FOTO) 
 SELECT
-    id_pedido string,
+    id_pedido string, 
     dt_pedido string,
     id_parceiro string,
     id_cliente string,
     id_filial string,
-    vr_total_pago string
-    ${PARTICAO} as DT_FOTO
-FROM ${TARGET_DATABASE}.${TARGET_TABLE_EXTERNAL};
-
-
+    vr_total_pago string,
+	${PARTICAO} AS DT_FOTO
+FROM ${TARGET_DATABASE}.${TARGET_TABLE_EXTERNAL}
+;
